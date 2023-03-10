@@ -8,6 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RecruitersController extends AbstractController
 {
-
-    // these should be post
+    #[Route('/recruiter', name: 'app_recruiter', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->render('views/recruiters.html.twig');
+    }
 }
