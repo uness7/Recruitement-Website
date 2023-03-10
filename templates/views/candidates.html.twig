@@ -1,8 +1,338 @@
-<h1>Hello this is candidates page</h1>
-<div>
-    <a href="{{ path('app_logout') }}">
-        <button>
-            Logout
-        </button>
-    </a>
-</div>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV du candidat</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+
+        .container{
+            height: 250px;
+            width:  250px;
+            position: relative;
+        }
+        .wrapper #cancel-btn i{
+            position: absolute;
+            font-size: 20px;
+            right: 15px;
+            top: 15px;
+            color: #9658fe;
+            cursor: pointer;
+            display: none;
+        }
+
+
+        .wrapper .file-name{
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            padding: 8px 0;
+            font-size: 18px;
+            color: #fff;
+            display: none;
+
+        }
+        .wrapper.active:hover .file-name{
+            display: block;
+        }
+        .container #custom-btn{
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            height: 50px;
+            border: none;
+            outline: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+        }
+        /* ------------ GOOGLE FONTS ------------ */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        /* ------------ VARIABLES ------------ */
+        :root{
+            /* FONT */
+            --font: 'Poppins', sans-serif;
+
+            /* COLORS */
+            --color:   #4070f4;
+            --bg-color: #f4f4f4;
+        }
+
+        /* ------------ BASE ------------ */
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            font-family: var(--font);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
+            background-color: var(--bg-color);
+        }
+
+        /* ----------- SLIDER ------------ */
+        .swiper{
+            width: 100%;
+            height: 90%;
+        }
+
+        .swiper-wrapper{
+            width: 100%;
+            height: 35em;
+            display: flex;
+            align-items: center;
+        }
+
+        .card{
+            width: 25em;
+            height: 90%;
+            background-color: #fff;
+            border-radius: 2em;
+            box-shadow: 0 0 2em rgba(0, 0, 0, .2);
+            padding: 2em 1em;
+
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            margin: 0 2em;
+        }
+
+        .swiper-slide:not(.swiper-slide-active){
+            filter: blur(1px);
+        }
+
+        .card__image{
+            width: 10em;
+            height: 10em;
+            border-radius: 50%;
+            border: 5px solid var(--color);
+            padding: 3px;
+            margin-bottom: 2em;
+        }
+
+        .card__image img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card__content{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .card__title{
+            font-size: 1.5rem;
+            font-weight: 500;
+            position: relative;
+            top: .2em;
+        }
+        #title.card__title{
+            text-align: center;
+            position: absolute;
+            top: auto;
+            left: auto;
+
+        }
+
+        .card__name{
+            color: var(--color);
+        }
+
+        .card__text {
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 1em 0;
+        }
+        #b2.card__btn{
+            background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            height: 50px;
+            border: none;
+            outline: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+        }
+
+        .card__btn{
+
+            color: #fff;
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            border: none;
+            padding: .5em;
+            border-radius: .5em;
+            margin-top: .5em;
+            cursor: pointer;
+        }
+        a{
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+<section class="swiper mySwiper">
+
+    <div class="swiper-wrapper">
+
+
+
+
+        <div class="card swiper-slide">
+            <div class="card__image">
+                <img src="   file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo%20qt2.jfif " alt="card image">
+            </div>
+
+            <div class="card__content">
+                <span class="card__title" id="title"> Choose your best option </span>
+
+
+
+
+
+            </div>
+        </div>
+        <div class="card swiper-slide">
+            <div class="card__image">
+                <img src="   file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo%20cr%C3%A9e-cv.jfif" alt="card image">
+            </div>
+
+            <div class="card__content">
+                <span class="card__title">Créer un nouveau CV </span>
+
+                <p class="card__text"> Notre outil vous accompagnera étape par étape pour créer votre cv.</p>
+                <a href="second-page.html">
+                    <button class="card__btn" id="b2"> Créer votre cv </button>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="card swiper-slide">
+            <div class="card__image">
+                <img src="  file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo-upload.jfif " alt="card image">
+            </div>
+
+            <div class="card__content">
+                <span class="card__title"> J'ai déjà un CV </span>
+
+                <p class="card__text"> Votre CV sera mis en page automatiquement avec son contenu.</p>
+                <div class="card__btn">
+                    <div class="container">
+
+                        <button onclick="defaultBtnActive()" id="custom-btn">Parcourir votre cv</button>
+                        <input id="default-btn" type="file" hidden>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div>
+            <a href="{{ path('app_logout') }}">
+                <button>
+                    Logout
+                </button>
+            </a>
+        </div>
+
+
+
+
+    </div>
+</section>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 300,
+            modifier: 1,
+            slideShadows: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+</script>
+<script>
+    const wrapper = document.querySelector(".wrapper");
+    const fileName = document.querySelector(".file-name");
+    const defaultBtn = document.querySelector("#default-btn");
+    const customBtn = document.querySelector("#custom-btn");
+    const cancelBtn = document.querySelector("#cancel-btn i");
+    const img = document.querySelector("img");
+    let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+    function defaultBtnActive(){
+        defaultBtn.click();
+    }
+    defaultBtn.addEventListener("change", function(){
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(){
+                const result = reader.result;
+                img.src = result;
+                wrapper.classList.add("active");
+            }
+            cancelBtn.addEventListener("click", function(){
+                img.src = "";
+                wrapper.classList.remove("active");
+            })
+            reader.readAsDataURL(file);
+        }
+        if(this.value){
+            let valueStore = this.value.match(regExp);
+            fileName.textContent = valueStore;
+        }
+    });
+</script>
+
+</body>
+</html>

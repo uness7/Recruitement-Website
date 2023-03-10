@@ -2,6 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Candidate;
+use App\Entity\Recruiter;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -13,7 +18,7 @@ class AdminDashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'app_admin')]
     public function index(): Response
     {
-        return parent::index();
+        return $this->render('admin/index.html.twig');
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -41,6 +46,19 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linkToCrud('Candidate', 'fas fa-list', Candidate::class);
+        yield MenuItem::linkToCrud('Recruiter', 'fas fa-list', Recruiter::class);
+        yield MenuItem::linkToRoute('Homepage', 'fas fa-home', 'app_homepage');
+        yield MenuItem::linkToLogout('Logout', 'fa fa-sign-out');
     }
+
+
+    // Adding detail page to all entities
+    public function configureActions(): Actions
+    {
+        return parent::configureActions()
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+    }
+
+
 }

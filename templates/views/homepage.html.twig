@@ -20,10 +20,21 @@
     <div>
        <a href="{{ path('app_login') }}">
            <button>
-               Log In To Access Your Account :)
+               LOG IN TO ACCESS YOUR ACCOUNT :)
            </button>
        </a>
     </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div>
+            <a href="{{ path('app_admin') }}">
+                <button>
+                    BACK TO ADMIN PAGE
+                </button>
+            </a>
+        </div>
+    {% endif %}
+
     </div>
 </body>
 </html>
