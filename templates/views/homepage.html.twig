@@ -1,40 +1,85 @@
+{#<!DOCTYPE html>#}
+{#<html lang="utf-8">#}
+{#<head>#}
+{#    <title>Welcome to Our Website</title>#}
+{#    <link rel="stylesheet" href="{{ asset('Style/style.css') }}">#}
+{#</head>#}
+{#<body>#}
+{#<div class="container">#}
+{#    <h1>Welcome to Our Website</h1>#}
+{#    <div>#}
+{#       <a href="{{ path('app_login') }}">#}
+{#           <button>#}
+{#               LOG IN TO ACCESS YOUR ACCOUNT :)#}
+{#           </button>#}
+{#       </a>#}
+{#    </div>#}
+
+{#    {% if is_granted('ROLE_ADMIN') %}#}
+{#        <div>#}
+{#            <a href="{{ path('app_admin') }}">#}
+{#                <button>#}
+{#                    BACK TO ADMIN PAGE#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    {% endif %}#}
+
+{# {% if is_granted('ROLE_RECRUITER') %}#}
+{#        <div>#}
+{#            <a href="{{ path('app_recruiter') }}">#}
+{#                <button>#}
+{#                    BACK TO My Page#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    {% endif %}#}
+
+{#    </div>#}
+{#</body>#}
+{#</html>#}
+
+
 <!DOCTYPE html>
-<html lang="utf-8">
+<html>
 <head>
-    <title>Welcome to Our Website</title>
-    <link rel="stylesheet" href="{{ asset('Style/style.css') }}">
+    <title>Recruitment Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F7F7F7;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #6096C3;
+            color: #FFFFFF;
+            font-size: 24px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2E3E94;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Welcome to Our Website</h1>
-{#    <p>Please select your user type:</p>#}
-{#    <div class="button">#}
-{#        <a href="{{ path('app_login') }}">#}
-{#            <button>Candidate</button>#}
-{#        </a>#}
-
-{#        <a href="{{ path('app_login') }}">#}
-{#            <button>Recruiter</button>#}
-{#        </a>#}
-
-    <div>
-       <a href="{{ path('app_login') }}">
-           <button>
-               LOG IN TO ACCESS YOUR ACCOUNT :)
-           </button>
-       </a>
-    </div>
-
-    {% if is_granted('ROLE_ADMIN') %}
-        <div>
-            <a href="{{ path('app_admin') }}">
-                <button>
-                    BACK TO ADMIN PAGE
-                </button>
-            </a>
-        </div>
-    {% endif %}
-
-    </div>
+<h1>Welcome to Our Recruitment Page</h1>
+<p>We help connect talented individuals with exciting job opportunities</p>
+<a href="{{ path('app_login') }}"><button>LOG IN</button></a>
 </body>
 </html>

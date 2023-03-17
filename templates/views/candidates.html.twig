@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV du candidat</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Web Project 3</title>
+{#    <link rel="stylesheet" href="style.css">#}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
+{#    <link rel="stylesheet" href="css/styles.css">#}
     <style>
         @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
@@ -218,7 +218,7 @@
 
         <div class="card swiper-slide">
             <div class="card__image">
-                <img src="   file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo%20qt2.jfif " alt="card image">
+                <img src="/public/Images/imageThree.jfif" alt="card image">
             </div>
 
             <div class="card__content">
@@ -232,14 +232,14 @@
         </div>
         <div class="card swiper-slide">
             <div class="card__image">
-                <img src="   file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo%20cr%C3%A9e-cv.jfif" alt="card image">
+                <img src="/public/Images/imageOne.jfif" alt="card image">
             </div>
 
             <div class="card__content">
                 <span class="card__title">Créer un nouveau CV </span>
 
                 <p class="card__text"> Notre outil vous accompagnera étape par étape pour créer votre cv.</p>
-                <a href="second-page.html">
+                <a href="{{ path('app_candidate_resume') }}">
                     <button class="card__btn" id="b2"> Créer votre cv </button>
                 </a>
 
@@ -248,7 +248,7 @@
 
         <div class="card swiper-slide">
             <div class="card__image">
-                <img src="  file:///C:/Users/PC/Downloads/cv%20du%20condidat/logo-upload.jfif " alt="card image">
+                <img src="/public/Images/imageTwo.jfif" alt="card image">
             </div>
 
             <div class="card__content">

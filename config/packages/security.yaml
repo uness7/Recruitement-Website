@@ -43,6 +43,7 @@ security:
         - { path: ^/candidate, roles: ROLE_CANDIDATE }
         - { path: ^/recruiter, roles: ROLE_RECRUITER }
         - { path: ^/new-page, roles: ROLE_RECRUITER }
+        - { path: ^/candidate/create-resume, roles: ROLE_CANDIDATE }
 #        - { path: ^/login, roles }
 
     role_hierarchy:

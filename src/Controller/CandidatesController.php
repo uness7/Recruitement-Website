@@ -13,4 +13,11 @@ class CandidatesController extends AbstractController
     {
         return $this->render('views/candidates.html.twig');
     }
+
+
+//    #[Route('/candidate/create-resume', name: 'app_candidate_resume', methods: ['GET'])]
+//    public function createCandidateCv(): Response
+//    {
+//        return $this->render('views/candidates_second_page.html.twig');
+//    }
 }

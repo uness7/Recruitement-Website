@@ -1,6 +1,5 @@
 
 ###> symfony/framework-bundle ###
-notes.txt
 /.env.local
 /.env.local.php
 /.env.*.local

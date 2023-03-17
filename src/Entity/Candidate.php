@@ -25,8 +25,9 @@ class Candidate
     #[ORM\Column(length: 255)]
     private string $phone_number = ' ';
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resume = null;
+//    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type:"blob", nullable: true)]
+    private mixed $resume = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidates')]
     private ?Recruiter $recruiter = null;
@@ -84,12 +85,12 @@ class Candidate
         return $this;
     }
 
-    public function getResume(): ?string
+    public function getResume(): mixed
     {
         return $this->resume;
     }
 
-    public function setResume(string $resume): self
+    public function setResume(mixed $resume): self
     {
         $this->resume = $resume;
 

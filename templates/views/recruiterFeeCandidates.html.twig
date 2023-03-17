@@ -1,0 +1,106 @@
+
+{% set id=recruiterId %}
+{% for candidate in freeCandidates %}
+    <div class="candidate">
+        <span>{{ candidate.firstName }}</span>
+        <span>{{ candidate.lastName }}</span>
+        {% if candidate.phoneNumber == null %}
+            <span>NULL</span>
+        {% endif %}
+        <span>{{ candidate.email }}</span>
+        <button class="add-button" onclick="addCandidate({{ candidate.id }})">Add</button>
+        <button class="remove-button" onclick="removeCandidate({{ candidate.id }})">Remove</button>
+    </div>
+{% endfor %}
+<style>
+    .candidate {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: #F2F2F2;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .name {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+
+    .buttons {
+        display: flex;
+    }
+
+    .add-button {
+        background-color: #43A047;
+        color: white;
+        margin-right: 10px;
+        border-radius: 3px;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    .remove-button {
+        background-color: #D32F2F;
+        color: white;
+        border-radius: 3px;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: #3F51B5;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    button:focus {
+        outline: none;
+    }
+</style>
+
+
+<script>
+        async function addCandidate(candidateId) {
+            let url = "{{ path('app_recruiters_addcandidate', {'id': id, 'candidateId': 'REPLACE_ME' }) }}";
+            url = url.replace('REPLACE_ME', candidateId);
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    candidateId: candidateId
+                })
+            });
+        }
+        async function removeCandidate(candidateId) {
+            let url = "{{ path('app_recruiters_remove_candidate', { 'id': id, 'candidateId': 'REPLACE_ME' }) }}";
+            url = url.replace('REPLACE_ME', candidateId);
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    candidateId: candidateId
+                })
+            });
+        }
+</script>
+
+
+
+{#logout#}
+<div>
+    <a href="{{ path('app_logout') }}">Logout</a>
+</div>
+
+
+

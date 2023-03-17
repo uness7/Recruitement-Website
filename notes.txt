@@ -1,5 +1,0 @@
-i need to creat the entities and define the relation
-then i have to do data fixtures and then create login system and then
-I will have to render html pages and add css styles.
-
-I will also need to create an admin controllerand add it into my db
