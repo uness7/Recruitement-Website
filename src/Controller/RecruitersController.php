@@ -13,9 +13,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecruitersController extends AbstractController
 {
     #[Route('/recruiter', name: 'app_recruiter', methods: ['GET'])]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('views/recruiters.html.twig');
+        $recruiterEmail = $this->getUser()->getUserIdentifier();
+//        dd($recruiter);
+        $recruiter = $entityManager
+            ->getRepository(Recruiter::class)
+            ->findOneBy([
+                'email' => $recruiterEmail
+            ]);
+        $recruiterId = $recruiter->getId();
+//        dd($recruiterId);
+        return $this->render('views/recruiters.html.twig',
+        [
+            'recruiterId' => $recruiterId
+        ]);
     }
 
     // Display Every Candidate in the db
@@ -106,16 +118,11 @@ class RecruitersController extends AbstractController
             ->getRepository(Candidate::class)
             ->findOneBy(['id' => $candidateId]);
         $content = stream_get_contents($candidate->getResume());
-//        dd($content);
 
-        ob_clean();
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"');
-//        $response->headers->set('Content-Length', strlen(stream_get_contents($candidate->getResume())));
-//        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->setContent($content); // $pdfContent is the binary content of the PDF file
-        return $response;
+        return new Response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"',
+        ]);
 
     }
 }

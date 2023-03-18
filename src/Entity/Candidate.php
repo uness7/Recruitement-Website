@@ -13,6 +13,26 @@ class Candidate
     #[ORM\Column]
     private ?int $id = null;
 
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $score = null;
+
+    /**
+     * @return int|null
+     */
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param int|null $score
+     */
+    public function setScore(?int $score): void
+    {
+        $this->score = $score;
+    }
+
     #[ORM\Column(length: 255)]
     private ?string $first_name = null;
 
