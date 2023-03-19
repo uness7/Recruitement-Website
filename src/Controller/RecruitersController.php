@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Candidate;
 use App\Entity\Recruiter;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RecruitersController extends AbstractController
@@ -124,5 +126,49 @@ class RecruitersController extends AbstractController
             'Content-Disposition' => 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"',
         ]);
 
+
+
     }
+
+
+    #[Route('/recruiter/update-profile', name: 'app_recruiters_updateprofile', methods: ['GET', 'POST'])]
+    public function updateProfile(EntityManagerInterface $entityManager, SessionInterface $session): Response
+    {
+        // recruiter id
+        $recruiterEmail = $this->getUser()->getUserIdentifier();
+        $recruiter = $entityManager
+            ->getRepository(Recruiter::class)
+            ->findOneBy(['email' => $recruiterEmail]);
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['email' => $recruiterEmail]);
+
+        // get data
+        if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+            $email = $_POST['email'];
+            $phoneNumber = $_POST['phone'];
+            $companyName = $_POST['company-name'];
+
+            if (!$email || !$phoneNumber || !$companyName) {
+                // One or more required fields are missing
+                $session->getFlashBag()->add('failure', 'Sorry, but all fields are required.');
+                return $this->redirectToRoute('app_recruiters_updateprofile');
+            }
+            // persisting updated date to the database
+            $recruiter->setCompanyName($companyName);
+            $recruiter->setEmail($email);
+            $recruiter->setPhoneNumber($phoneNumber);
+
+            $user->setEmail($email);
+
+            // persist data and flush
+            $entityManager->persist($recruiter);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            // display a lil message to the end user
+            $session->getFlashBag()->add('success', 'Your profile\'s info has been updated.');
+        }
+        return $this->render('views/recruiter-update-profile.html.twig');
+    }
+
 }

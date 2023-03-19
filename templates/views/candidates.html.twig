@@ -262,9 +262,28 @@
                         <input id="default-btn" type="file" hidden>
                     </div>
                 </div>
+            </div>
 
+        </div >
+
+        <div class="card swiper-slide">
+            <div class="card__image">
+                <img src="/public/Images/imageTwo.jfif" alt="card image">
+            </div>
+            <div class="card__content">
+                <span class="card__title"> Update Your Profile </span>
+{#                <p class="card__text"> .</p>#}
+                <div class="card__btn">
+                    <div class="container">
+                        <a href="{{ path('app_candidates_updateinfo') }}">
+                            <button  id="custom-btn">Update Your Information</button>
+                            <input id="default-btn" type="file" hidden>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div>
             <a href="{{ path('app_logout') }}">
                 <button>
