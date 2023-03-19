@@ -1,70 +1,106 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title> Recruteur Edit</title>
+</head>
+<body>
+
+
 {% set id=recruiterId %}
-{% for candidate in freeCandidates %}
-    <div class="candidate">
-        <span>{{ candidate.firstName }}</span>
-        <span>{{ candidate.lastName }}</span>
-        <span>{{ candidate.score }}</span>
-        {% if candidate.phoneNumber == null %}
-            <span>NULL</span>
-        {% endif %}
-        <span>{{ candidate.email }}</span>
-        <button class="add-button" onclick="addCandidate({{ candidate.id }})">Add</button>
-        <button class="remove-button" onclick="removeCandidate({{ candidate.id }})">Remove</button>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Free Candidates</h1>
+    <div class="row">
+        {% for candidate in freeCandidates %}
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ candidate.firstName }} {{ candidate.lastName }}</h5>
+                        <p class="card-text">Score: {{ candidate.score }}</p>
+                        {% if candidate.phoneNumber == null %}
+                            <p class="card-text">Phone: NULL</p>
+                        {% else %}
+                            <p class="card-text">Phone: {{ candidate.phoneNumber }}</p>
+                        {% endif %}
+                        <p class="card-text">Email: {{ candidate.email }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-success add-button" onclick="addCandidate({{ candidate.id }})">Add</button>
+                            <button class="btn btn-danger remove-button" onclick="removeCandidate({{ candidate.id }})">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-{% endfor %}
-<style>
-    .candidate {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        background-color: #F2F2F2;
-        padding: 10px;
-        border-radius: 5px;
-    }
+    <div class="text-center mt-5">
+        <a href="{{ path('app_logout') }}" class="btn btn-secondary">Logout</a>
+    </div>
+</div>
 
-    .name {
-        flex-grow: 1;
-        margin-right: 10px;
-    }
 
-    .buttons {
-        display: flex;
-    }
+</body>
+</html>
 
-    .add-button {
-        background-color: #43A047;
-        color: white;
-        margin-right: 10px;
-        border-radius: 3px;
-        border: none;
-        padding: 8px;
-        cursor: pointer;
-    }
 
-    .remove-button {
-        background-color: #D32F2F;
-        color: white;
-        border-radius: 3px;
-        border: none;
-        padding: 8px;
-        cursor: pointer;
-    }
+{#<style>#}
+{#    .candidate {#}
+{#        display: flex;#}
+{#        justify-content: space-between;#}
+{#        align-items: center;#}
+{#        margin-bottom: 10px;#}
+{#        background-color: #F2F2F2;#}
+{#        padding: 10px;#}
+{#        border-radius: 5px;#}
+{#    }#}
 
-    a {
-        text-decoration: none;
-        color: #3F51B5;
-    }
+{#    .name {#}
+{#        flex-grow: 1;#}
+{#        margin-right: 10px;#}
+{#    }#}
 
-    a:hover {
-        text-decoration: underline;
-    }
+{#    .buttons {#}
+{#        display: flex;#}
+{#    }#}
 
-    button:focus {
-        outline: none;
-    }
-</style>
+{#    .add-button {#}
+{#        background-color: #43A047;#}
+{#        color: white;#}
+{#        margin-right: 10px;#}
+{#        border-radius: 3px;#}
+{#        border: none;#}
+{#        padding: 8px;#}
+{#        cursor: pointer;#}
+{#    }#}
+
+{#    .remove-button {#}
+{#        background-color: #D32F2F;#}
+{#        color: white;#}
+{#        border-radius: 3px;#}
+{#        border: none;#}
+{#        padding: 8px;#}
+{#        cursor: pointer;#}
+{#    }#}
+
+{#    a {#}
+{#        text-decoration: none;#}
+{#        color: #3F51B5;#}
+{#    }#}
+
+{#    a:hover {#}
+{#        text-decoration: underline;#}
+{#    }#}
+
+{#    button:focus {#}
+{#        outline: none;#}
+{#    }#}
+{#</style>#}
 
 
 <script>
@@ -96,12 +132,6 @@
         }
 </script>
 
-
-
-{#logout#}
-<div>
-    <a href="{{ path('app_logout') }}">Logout</a>
-</div>
 
 
 

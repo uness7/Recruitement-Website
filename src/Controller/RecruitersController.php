@@ -121,6 +121,10 @@ class RecruitersController extends AbstractController
             ->findOneBy(['id' => $candidateId]);
         $content = stream_get_contents($candidate->getResume());
 
+        if ($content == null) {
+            return new Response('Sorry, but this candidate haven\'t uploaded their cv' );
+        }
+
         return new Response($content, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"',
