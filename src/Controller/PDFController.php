@@ -10,20 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\PDFScorer;
+
 
 class PDFController extends AbstractController
 {
 
-    /**
-     * @throws \Exception
-     */
+
     #[Route('/candidate/create-resume', name: 'app_candidate_resume', methods: ['GET', 'POST'])]
     public function viewResume(
         EntityManagerInterface $entityManager,
         SessionInterface $session,
-//        Request $request,
-//        PDFScorer $pdfScorer
     ): Response
     {
         $candidateId = $this->getUser()->getUserIdentifier();
@@ -55,12 +51,26 @@ class PDFController extends AbstractController
 //            $dompdf->stream('document-fails.pdf', ['Attachment' => 0]);
             $pdf = $dompdf->output();
 
-//            $score = $pdfScorer->scorePdf($pdf);
+            $pdfText = $dompdf->output([], 'S');
+
+            $keywords = [
+                'programming' => 10,
+                'communication' => 5,
+                'teamwork' => 5,
+                'problem-solving' => 7,
+                'leadership' => 8
+            ];
+
+            $score = 0;
+            foreach ($keywords as $keyword => $keywordScore) {
+                $count = substr_count(strtolower($pdfText), $keyword);
+                $score += $count * $keywordScore;
+            }
 
 
             // persist the data into the database
             $candidate->setResume($pdf);
-//            $candidate->setScore($score);
+            $candidate->setScore($score);
             $entityManager->persist($candidate);
             $entityManager->flush();
 

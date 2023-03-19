@@ -14,6 +14,7 @@
         "dompdf/dompdf": "^2.0",
         "easycorp/easyadmin-bundle": "^4.6",
         "knplabs/knp-snappy-bundle": "^1.9",
+        "setasign/fpdi-fpdf": "^2.3",
         "smalot/pdfparser": "^2.3",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
