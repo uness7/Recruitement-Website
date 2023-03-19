@@ -46,9 +46,6 @@ class PDFController extends AbstractController
 //            $socialMedia = $_REQUEST['social-media'];
 //            $info = $_REQUEST['info'];
 
-
-
-
             $content = '<p>Name:' . $fname . '</p>' ;
             $dompdf = new Dompdf;
             $dompdf->loadHtml($content);
@@ -57,7 +54,6 @@ class PDFController extends AbstractController
             ob_end_clean();
 //            $dompdf->stream('document-fails.pdf', ['Attachment' => 0]);
             $pdf = $dompdf->output();
-
 
 //            $score = $pdfScorer->scorePdf($pdf);
 
@@ -73,19 +69,4 @@ class PDFController extends AbstractController
         }
         return $this->render('views/candidates_second_page.html.twig');
     }
-
-
-//    #[Route('/candidate/create-resume/show-pdf', name: 'app_pdf_showpdf', methods: ['GET'])]
-//    public function showPDF(EntityManagerInterface $entityManager): Response
-//    {
-//        $candidateId = $this->getUser()->getUserIdentifier();
-////        dd($candidateId);
-//        $candidate = $entityManager
-//            ->getRepository(Candidate::class)
-//            ->findOneBy(['email' => $candidateId]);
-//        $response = new Response($candidate->getResume());
-//        $response->headers->set('Content-Type', 'application/pdf');
-//        $response->headers->set('Content-Disposition', 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"');
-//        return $response;
-//    }
 }
