@@ -1,65 +1,185 @@
+{% extends 'base.html.twig' %}
 
-
-{% set id=recruiterId %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Page</title>
+{% block stylesheets %}
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #F7F7F7;
-            font-family: Arial, sans-serif;
-            color: #444;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #FFF;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-        .button {
-            background-color: #4285F4;
-            color: #FFF;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.2s ease-in-out;
-        }
-        .button:hover {
-            background-color: #0D47A1;
-        }
+
     </style>
-</head>
-<body>
-<div class="container">
-    <h1>Hello Mr Recruiter</h1>
-    <div>
-        <a href="{{ path('app_logout') }}" class="button">Logout</a>
-        <a href="{{ path('app_recruiter_getAllFreeCandidates', { 'id': id  }) }}" class="button">List of Available Candidates</a>
-        <a href="{{ path('app_recruiter_getAllCandidates', { 'id': id } ) }}" class="button">My Candidates</a>
-        <a href="{{ path('app_recruiters_updateprofile') }}" ><button class="button">Update Your Profile</button></a>
+{% endblock %}
+
+{% block body %}
+    <body>
+        {#        Navbar Section#}
+        <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand">Recruitment</a>
+                <button class="navbar-toggler"
+                    type="button"
+                    data-bs-popper="collpase"
+                    data-bs-target="#navmenu"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item text-center">
+                            <span class="text-light btn btn-hover">Youness Zioual</span>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('app_logout') }}" class="text-light btn btn-hover">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+    {#   Profile Section     #}
+    <section class="bg-dark p-5 text-light">
+            <div class="container">
+                <div class="d-sm-flex justify-content-between">
+                    <img class="img-fluid w-25 h-25 mx-2 d-none d-sm-block" src="{{ asset('Images/userAccount-svg.svg') }}" alt="image"    />
+                    <div class="bg-dark text-light w-100 row">
+                        <div class="col-5 offset-3 w-50">
+                            <h1 class=" text-right text-light mb-4">
+                                <i class="bi bi-info-circle"></i>
+                                Profile Information</h1>
+                            <p>First Name: {{ recruiterName }}</p>
+                            <p>Last Name: {{ recruiterLastName }}</p>
+                            <p>Email: younes@gmail.com</p>
+                            <p>Company: Waizi's</p>
+                            <a href="{{ path('app_recruiters_update_profile') }}" class="btn btn-light mt-5">Update Profile</a>
+                            <a href="{{ path('app_recruiters_create_job_listing') }}" class="btn btn-light mt-5">Create A Job</a>
+                        </div>  
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    {#    See Created Posts#}
+<section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card p-3">
+                        <div class="card-title text-center text-uppercase text-black">
+                            <h4>See posts you created & modify them as you wish!</h4>
+                        </div>
+                        <div class="card-body">
+                            {% for jobListing in jobListings %}
+                            <div class="d-flex justify-content-between border border-dark rounded p-3 mb-3">
+                                <div>
+                                    <h2>{{ jobListing.title }}</h2>
+                                    <div>
+                                        <p>{{ jobListing.description }}</p>
+                                        <p><strong>Location:</strong> {{ jobListing.location }}</p>
+                                        <p><strong>Salary:</strong> {{ jobListing.salary }}</p>
+                                        <p><strong>Qualifications:</strong> {{ jobListing.qualifications }}</p>
+                                        <p><strong>Employment Type:</strong> {{ jobListing.employmentType }}</p>
+                                        <p><strong>Created:</strong> {{ jobListing.createdAt | date('Y-m-d H:i:s') }}</p>
+                                        <p><strong>Expires:</strong> {{ jobListing.expiresAt | date('Y-m-d H:i:s') }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a href="{{ path('app_recruiters_display_applications',
+                                        { 'jobListingId': jobListing.id } )}}"
+                                       class="btn btn-dark px-2 ml-2 mt-5"
+                                    >See who applied</a>
+
+                                    <a class="btn btn-dark px-2 ml-2 mt-5"
+                                       href="{{ path('app_recruiters_edit_post', { 'jobListingId': jobListing.id } ) }}"
+                                    >Edit Post</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{#    Modal For See Post#}
+<div class="modal" id="view-post" tabindex="-1" aria-labelledby="view-post" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+{#                    <h1 class="modal-title fs-5" id="view-post">Edit This Post: </h1>#}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h1>here display this specific post</h1>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-</body>
-</html>
+
+
+    {#        Footer Section#}
+    <footer class="bg-dark p-3">
+        <div class="container">
+            <div class="d-flex text-black justify-content-between  text-center">
+                <div>
+                    <p class="text-muted m-2">Copy rights are reserved 2023</p>
+                </div>
+                <div>
+                    <p class="text-muted m-2">Created In Casablanca With <i class="bi bi-heart-fill text-danger"></i> </p>
+                </div>
+                <div>
+                    <a href="http://www.linkedin.com/in/younes-zioual-a739ba244/" class="btn btn-dark text-light" target="_blank">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="http://www.github.com/uness7" class="btn btn-dark text-light" target="_blank">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <a href="http://www.instagram.com/waiziiii" class="btn btn-dark text-light" target="_blank">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+    </body>
+{% endblock %}
+
+
+
+
+
+
+{#<div class="col-md-6 offset-3">#}
+{#    <div class="card">#}
+{#        <div class="card-header">Options</div>#}
+{#        <div class="card-body">#}
+{#            <a class="btn btn-dark" href="{{ path('app_recruiter_getAllFreeCandidates', { 'id': id  }) }}" class="btn btn-dark">#}
+{#                Candidates#}
+{#            </a>#}
+{#            <a class="btn btn-dark" href="{{ path('app_recruiter_getAllCandidates', { 'id': id } ) }}" class="button">My Candidates</a>#}
+{#            <a class="btn btn-dark"  >Update Profile</a>#}
+{#        </div>#}
+{#        <div class="card-footer">#}
+{#            <a  class="btn btn-dark">logout</a>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#</div>#}
+
+
+
+
+{#Welcome to our recruitment page, where we connect top talent with leading organizations across industries. As a recruiter on our team, you'll have the opportunity to make a meaningful impact on people's lives by helping them find their dream jobs while also helping our clients build successful teams.#}
+
+{#Our recruitment process is designed to be efficient and effective, ensuring that both our clients and candidates have a positive experience. We use cutting-edge technology and innovative strategies to identify and attract top talent from around the world. Our recruiters are skilled at assessing candidates' skills and qualifications, as well as their fit within an organization's culture.#}
+
+{#As a member of our recruitment team, you'll work closely with our clients to understand their unique hiring needs and develop tailored recruitment strategies to meet those needs. You'll also build strong relationships with candidates, helping them navigate the job search process and ultimately find the right fit.#}
+
+{#Our team is made up of experienced recruiters with diverse backgrounds and areas of expertise. We value collaboration, continuous learning, and a results-driven approach. We offer competitive compensation packages, professional development opportunities, and a dynamic work environment where you can thrive.#}
+
+{#If you're passionate about helping people find their dream jobs and want to be part of a team that's making a difference in the world of recruitment, we'd love to hear from you. Browse our open positions or submit your resume to be considered for future opportunities.#}

@@ -10,10 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: RecruiterRepository::class)]
 class Recruiter
 {
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    
 
     #[ORM\Column(length: 255)]
     private string $companyName = ' ';
@@ -28,9 +32,19 @@ class Recruiter
     #[ORM\OneToMany(mappedBy: 'recruiter', targetEntity: Candidate::class)]
     private Collection $candidates;
 
+    #[ORM\OneToMany(mappedBy: 'recruiterId', targetEntity: JobListing::class, orphanRemoval: true)]
+    private Collection $jobListings;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
     public function __construct()
     {
         $this->candidates = new ArrayCollection();
+        $this->jobListings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,5 +118,58 @@ class Recruiter
         return $this;
     }
 
+    /**
+     * @return Collection<int, JobListing>
+     */
+    public function getJobListings(): Collection
+    {
+        return $this->jobListings;
+    }
+
+    public function addJobListing(JobListing $jobListing): self
+    {
+        if (!$this->jobListings->contains($jobListing)) {
+            $this->jobListings->add($jobListing);
+            $jobListing->setRecruiterId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobListing(JobListing $jobListing): self
+    {
+        if ($this->jobListings->removeElement($jobListing)) {
+            // set the owning side to null (unless already changed)
+            if ($jobListing->getRecruiterId() === $this) {
+                $jobListing->setRecruiterId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
 
 }

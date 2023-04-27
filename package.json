@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "jspdf": "^2.5.1"
+    "@popperjs/core": "^2.11.7",
+    "autoprefixer": "^10.4.14",
+    "jspdf": "^2.5.1",
+    "postcss-loader": "^7.2.4",
+    "sass-loader": "^13.2.2"
+  },
+  "devDependencies": {
+    "bootstrap": "^5.2.3"
   }
 }

@@ -1,57 +1,38 @@
-{#{% extends 'base.html.twig' %}#}
-
-{#{% block title %}Register{% endblock %}#}
-
-
-{#{% block body %}#}
-{#    <link rel="stylesheet" href="{{ asset('Style/style.css') }}">#}
-{#    <h1>Register</h1>#}
-
-{#    {{ form_start(registrationForm) }}#}
-{#        {{ form_row(registrationForm.firstName) }}#}
-{#        {{ form_row(registrationForm.lastName) }}#}
-{#        {{ form_row(registrationForm.email) }}#}
-{#        {{ form_row(registrationForm.userType) }}#}
-{#    {{ form_start(recruiterForm) }}#}
-{#        {{ form_row(recruiterForm.companyName) }}#}
-{#    {{ form_end(recruiterForm) }}#}
-{#        {{ form_row(registrationForm.plainPassword, {#}
-{#            label: 'Password'#}
-{#        }) }}#}
-
-{#        <button type="submit" class="btn">Register</button>#}
-{#    {{ form_end(registrationForm) }}#}
-{#{% endblock %}#}
-
-
-
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <style>
+        .btn-submit {
+            background-color: #6096C3;
+            color: #FFFFFF;
+            margin-left: 200px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <link rel="stylesheet" href="{{ asset('Style/style_registeration_page.css') }}">
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
+    <div class="container">
+        <div class="col-md-6 offset-3">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h2>Create Your Account: </h2>
+                </div>
+                <div class="card-body">
+                    {{ form_start(registrationForm) }}
+                    {{ form_row(registrationForm.firstName, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_row(registrationForm.lastName, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_row(registrationForm.email, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_row(registrationForm.plainPassword, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_row(registrationForm.userType, { 'attr': {'class': 'form-select'} }) }}
 
-    <h2>User Information</h2>
-    {{ form_row(registrationForm.firstName) }}
-    {{ form_row(registrationForm.lastName) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.plainPassword) }}
-    {{ form_row(registrationForm.userType) }}
-
-    {% if registrationForm.userType.vars.value == 'candidate' %}
-        <h2>Candidate Information</h2>
-        {{ form_row(candidateForm.resume) }}
-        {{ form_row(candidateForm.coverLetter) }}
-    {% endif %}
-
-    {% if registrationForm.userType.vars.value == 'recruiter' %}
-        <h2>Recruiter Information</h2>
-        {{ form_row(recruiterForm.companyName) }}
-        {{ form_row(recruiterForm.companyAddress) }}
-    {% endif %}
-    <button type="submit" class="btn">Register</button>
-    <p>If you already have an account <a href="{{ path('app_login') }}"> sign in</a> </p>
-    {{ form_end(registrationForm) }}
+                    <button type="submit" class="btn btn-submit mt-2 mb-2">Register</button>
+                    <div class="card-footer">
+                        <p>If you already have an account <a href="{{ path('app_login') }}">sign in</a> </p>
+                    </div>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

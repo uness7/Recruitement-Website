@@ -1,0 +1,85 @@
+{% extends '/base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <body>
+        <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand">Recruitment</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-popper="collpase"
+                    data-bs-target="#navmenu"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item text-center">
+                        <span class="text-light btn btn-hover">Youness Zioual</span>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_logout') }}" class="text-light btn btn-hover">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+        <section class="my-5 p-5 text-black">
+            <div class="container min-vh-100">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h1>Edit Post: </h1>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(jobListingForm) }}
+                            {{ form_row(jobListingForm.title, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(jobListingForm.description, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(jobListingForm.location, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(jobListingForm.salary, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(jobListingForm.qualifications, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(jobListingForm.employmentType, { 'attr': {'class': 'form-control'} }) }}
+                            <button type="submit" class="btn btn-submit mt-2 mb-2 btn-dark text-light">Save</button>
+                        {{ form_end(jobListingForm) }}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-dark p-3">
+            <div class="container">
+                <div class="d-flex text-black justify-content-between  text-center">
+                    <div>
+                        <p class="text-muted m-2">Copy rights are reserved 2023</p>
+                    </div>
+                    <div>
+                        <p class="text-muted m-2">Created In Casablanca With <i class="bi bi-heart-fill text-danger"></i> </p>
+                    </div>
+                    <div>
+                        <a href="http://www.linkedin.com/in/younes-zioual-a739ba244/" class="btn btn-dark text-light" target="_blank">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="http://www.github.com/uness7" class="btn btn-dark text-light" target="_blank">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="http://www.instagram.com/waiziiii" class="btn btn-dark text-light" target="_blank">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+{% endblock %}

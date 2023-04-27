@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CandidateRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CandidateRepository::class)]
@@ -51,6 +53,14 @@ class Candidate
 
     #[ORM\ManyToOne(inversedBy: 'candidates')]
     private ?Recruiter $recruiter = null;
+
+    #[ORM\OneToMany(mappedBy: 'candidateId', targetEntity: Application::class, orphanRemoval: true)]
+    private Collection $applications;
+
+    public function __construct()
+    {
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,6 +135,36 @@ class Candidate
     public function setRecruiter(?Recruiter $recruiter): self
     {
         $this->recruiter = $recruiter;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): self
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setCandidateId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): self
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getCandidateId() === $this) {
+                $application->setCandidateId(null);
+            }
+        }
 
         return $this;
     }

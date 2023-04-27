@@ -18,7 +18,10 @@
     class RegistrationController extends AbstractController
     {
         #[Route('/register', name: 'app_register', methods: ['POST', 'GET'])]
-        public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+        public function register(
+            Request $request,
+            UserPasswordHasherInterface $userPasswordHasher,
+            EntityManagerInterface $entityManager): Response
         {
             $user = new User();
             $candidate = new Candidate();
@@ -50,7 +53,8 @@
                 $user->setFirstName($firstName);
                 $user->setLastName($lastName);
                 $user->setEmail($email);
-                $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+                $user->setPassword($userPasswordHasher->hashPassword($user,
+                    $form->get('plainPassword')->getData()));
 
 
                 if ($userType === 'candidate') {
@@ -92,3 +96,4 @@
             ]);
         }
     }
+

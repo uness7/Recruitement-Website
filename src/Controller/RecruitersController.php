@@ -3,32 +3,49 @@
 namespace App\Controller;
 
 use App\Entity\Candidate;
+use App\Entity\JobListing;
 use App\Entity\Recruiter;
 use App\Entity\User;
+use App\Form\JobListingFormType;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use FontLib\Table\Type\loca;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RecruitersController extends AbstractController
 {
-    #[Route('/recruiter', name: 'app_recruiter', methods: ['GET'])]
+    #[Route('/recruiter', name: 'app_recruiter', methods: ['GET', 'POST'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $recruiterEmail = $this->getUser()->getUserIdentifier();
-//        dd($recruiter);
         $recruiter = $entityManager
             ->getRepository(Recruiter::class)
             ->findOneBy([
                 'email' => $recruiterEmail
             ]);
+
         $recruiterId = $recruiter->getId();
-//        dd($recruiterId);
+        $recruiterCompany = $recruiter->getCompanyName();
+        $recruiterName = $recruiter->getName();
+        $recruiterLastName = $recruiter->getLastName();
+        $recruiterJobListings = $recruiter->getJobListings();
+
+
+
+
         return $this->render('views/recruiters.html.twig',
         [
-            'recruiterId' => $recruiterId
+            'recruiterName' => $recruiterName,
+            'recruiterLastName' => $recruiterLastName,
+            'recruiterId' => $recruiterId,
+            'company' => $recruiterCompany,
+            'email'=> $recruiterEmail,
+            'jobListings' => $recruiterJobListings,
         ]);
     }
 
@@ -40,7 +57,6 @@ class RecruitersController extends AbstractController
         $freeCandidates = $entityManager
             ->getRepository(Candidate::class)
             ->findAll();
-//        dd($recruiter);
         return $this->render('views/recruiterFeeCandidates.html.twig',
             [
                 'freeCandidates' => $freeCandidates,
@@ -61,7 +77,7 @@ class RecruitersController extends AbstractController
                     'recruiter' => $recruiter
                 ]
             );
-//        dd($candidates);
+
         return $this->render('views/recruiterMyCandidates.html.twig',
             [
                 'candidates' => $candidates,
@@ -108,6 +124,11 @@ class RecruitersController extends AbstractController
     }
 
 
+
+
+
+
+
     #[Route('/recruiter/{id}/getMyCandidates/{candidateId}/resume', name: 'app_recruiters_displayresume')]
     public function displayResume(
         Recruiter              $recruiter,
@@ -135,7 +156,13 @@ class RecruitersController extends AbstractController
     }
 
 
-    #[Route('/recruiter/update-profile', name: 'app_recruiters_updateprofile', methods: ['GET', 'POST'])]
+
+
+
+
+
+
+    #[Route('/recruiter/update-profile', name: 'app_recruiters_update_profile', methods: ['GET', 'POST'])]
     public function updateProfile(EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         // recruiter id
@@ -175,4 +202,144 @@ class RecruitersController extends AbstractController
         return $this->render('views/recruiter-update-profile.html.twig');
     }
 
+
+
+
+    // Create new job posts
+    #[Route('/recruiter/createJobListing', name: 'app_recruiters_create_job_listing', methods: ['POST', 'GET'])]
+    public function createJobListing(
+        Request                 $request,
+        EntityManagerInterface $entityManager
+    ) : Response {
+        $recruiterEmail = $this->getUser()->getUserIdentifier();
+        $recruiter = $entityManager
+            ->getRepository(Recruiter::class)
+            ->findOneBy(['email' => $recruiterEmail]);
+
+
+
+        $jobListing = new JobListing();
+        $jobListingForm = $this->createForm(JobListingFormType::class);
+        $jobListingForm->handleRequest($request);
+
+        if($jobListingForm->isSubmitted() && $jobListingForm->isValid()) {
+
+            $title = $jobListingForm->get('title')->getData();
+            $description = $jobListingForm->get('description')->getData();
+            $location = $jobListingForm->get('location')->getData();
+            $salary = $jobListingForm->get('salary')->getData();
+            $employmentType = $jobListingForm->get('employmentType')->getData();
+            $qualifications = $jobListingForm->get('qualifications')->getData();
+
+            $createdAt = new DateTimeImmutable();
+            $expiresAt = $createdAt->modify('+2 weeks');
+
+
+
+            $jobListing->setTitle($title);
+            $jobListing->setDescription($description);
+            $jobListing->setLocation($location);
+            $jobListing->setSalary($salary);
+            $jobListing->setQualifications($qualifications);
+            $jobListing->setEmploymentType($employmentType);
+            $jobListing->setCreatedAt($createdAt);
+            $jobListing->setExpiresAt($expiresAt);
+            $jobListing->setRecruiterId($recruiter);
+
+
+            $entityManager->persist($jobListing);
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute(
+                'app_recruiter'
+            );
+        }
+
+        return $this->render(
+            'views/recruiter_create_jobListing.html.twig',
+            [
+                'jobListingForm' => $jobListingForm->createView(),
+            ]
+        );
+    }
+
+
+
+    // Display Applications for a chosen post
+    #[Route('/recruiter/displayApplications/{jobListingId}', name: 'app_recruiters_display_applications', methods: ['GET'])]
+    public function displayApplications(
+        $jobListingId,
+        EntityManagerInterface $entityManager,
+    ) : Response
+    {
+        $OurJobListing = $entityManager
+            ->getRepository(JobListing::class)
+            ->findOneBy(['id' => $jobListingId]);
+
+        $applications = $OurJobListing->getApplications();
+
+        return $this->render(
+            'views/applications.html.twig',
+            [
+                'jobListingId' => $jobListingId,
+                'applications' => $applications,
+            ]
+        );
+    }
+
+
+    #[Route(
+        '/recruiter/{jobListingId}/edit-post',
+        name: 'app_recruiters_edit_post',
+        methods: ['GET', 'POST']
+    )]
+    public function editPost(
+        $jobListingId,
+        EntityManagerInterface $entityManager,
+        Request $request,
+
+    ) : Response
+    {
+        $jobListing = $entityManager->getRepository(JobListing::class)->find($jobListingId);
+        $jobListingForm = $this->createForm(JobListingFormType::class, $jobListing);
+        $jobListingForm->handleRequest($request);
+
+        if($jobListingForm->isSubmitted() && $jobListingForm->isValid()) {
+
+            $title = $jobListingForm->get('title')->getData();
+            $description = $jobListingForm->get('description')->getData();
+            $location = $jobListingForm->get('location')->getData();
+            $salary = $jobListingForm->get('salary')->getData();
+            $employmentType = $jobListingForm->get('employmentType')->getData();
+            $qualifications = $jobListingForm->get('qualifications')->getData();
+
+
+            if(!$title)
+                $jobListing->setTitle($title);
+            if(!$description)
+                $jobListing->setDescription($description);
+            if(!$location)
+                $jobListing->setLocation($location);
+            if(!$salary)
+                $jobListing->setSalary($salary);
+            if(!$qualifications)
+                $jobListing->setQualifications($qualifications);
+            if(!$employmentType)
+                $jobListing->setEmploymentType($employmentType);
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute(
+                'app_recruiter',
+            );
+        }
+        return $this->render(
+            'views/recruiter_edit_post.html.twig',
+            [
+                'jobListingId' => $jobListingId,
+                'jobListingForm' => $jobListingForm
+            ]
+        );
+    }
 }
