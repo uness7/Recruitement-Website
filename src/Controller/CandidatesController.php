@@ -18,6 +18,7 @@ class CandidatesController extends AbstractController
         return $this->render('views/candidates.html.twig');
     }
 
+
     #[Route('/candidate/updateProfile', name: 'app_candidates_updateinfo', methods: ['GET', 'POST'])]
     public function updateInfo(EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
@@ -25,10 +26,10 @@ class CandidatesController extends AbstractController
         $user = $entityManager
             ->getRepository(User::class)
             ->findOneBy(['email' => $candidateEmail]);
-//        dd($candidateEmail);
         $candidate = $entityManager->getRepository(Candidate::class)
             ->findOneBy(['email' => $candidateEmail]);
-//        dd($candidate);
+
+
         // let's get the data from the request
         if( $_SERVER['REQUEST_METHOD'] == 'POST') {
             $firstName = $_POST['first-name'];
@@ -61,5 +62,17 @@ class CandidatesController extends AbstractController
             $session->getFlashBag()->add('success', 'Your profile\'s info has been updated.');
         }
         return $this->render('views/candidates-update-profile.html.twig');
+    }
+
+
+    #[Route('/candidate/cv-builder', name: 'app_candidates_cv_builder', methods: ['GET'])]
+    public function CVBuilder() : Response
+    {
+        return $this->render(
+            'views/candidates_cv_builder.html.twig',
+            [
+
+            ]
+        );
     }
 }

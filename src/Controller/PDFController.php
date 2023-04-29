@@ -77,6 +77,6 @@ class PDFController extends AbstractController
             // send the user a lil message
             $session->getFlashBag()->add('success', 'Your PDF has been generated.');
         }
-        return $this->render('views/candidates_second_page.html.twig');
+        return $this->render('candidates_cv_builder.html.twig');
     }
 }

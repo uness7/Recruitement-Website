@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Controller\Queries\HomepageSearchData;
 use App\Entity\JobListing;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -63,4 +64,19 @@ class JobListingRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function searchJobListings(HomepageSearchData $searchData): array
+    {
+        $query = $this->createQueryBuilder('j')
+            ->where('j.title LIKE :keywords')
+            ->setParameter('keywords', '%'.$searchData->getTitle().'%');
+
+        if ($searchData->getTitle()) {
+            $query->andWhere('j.title = :title ')
+                ->setParameter('title', $searchData->getTitle());
+        }
+
+        return $query->getQuery()->getResult();
+    }
+
 }
