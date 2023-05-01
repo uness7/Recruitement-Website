@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Controller\Queries\HomepageSearchData;
+use App\Entity\Application;
+use App\Entity\Candidate;
 use App\Entity\JobListing;
+use App\Form\ApplicationFormType;
 use App\Form\JobsSearchFromType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,12 +75,89 @@ class HomepageController extends AbstractController
         methods: ['GET'
         ])
     ]
-    public function detailsPage($jobsId) : Response
+    public function detailsPage($jobsId, EntityManagerInterface $entityManager) : Response
     {
+        $job = $entityManager
+            ->getRepository(JobListing::class)
+            ->findOneBy(
+                [
+                    'id' => $jobsId
+                ]
+            );
+//        dd($jobsId);
+
         return $this->render(
             'views/candidates-job-details.html.twig',
             [
-                'jobsId' => $jobsId
+                'job' => $job
+            ]
+        );
+    }
+
+    #[Route('/candidate/{jobsId}/details/apply', name: 'app_apply', methods: ['POST', 'GET'])]
+    public function apply(
+        $jobsId,
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ) : Response
+    {
+        $candidateEmail = $this->getUser()->getUserIdentifier();
+        $candidate = $entityManager
+            ->getRepository(Candidate::class)
+            ->findOneBy(
+                [
+                    'email'  => $candidateEmail
+                ]
+            );
+
+        $job = $entityManager
+            ->getRepository(JobListing::class)
+            ->find([
+                'id' => $jobsId
+            ]);
+
+        $application = new Application();
+        $applicationForm = $this->createForm(ApplicationFormType::class);
+        $applicationForm->handleRequest($request);
+
+        if($applicationForm->isSubmitted() && $applicationForm->isValid())
+        {
+            $name = $applicationForm->get('applicantName')->getData();
+            $email = $applicationForm->get('applicantEmail')->getData();
+            $phoneNumber = $applicationForm->get('applicantPhoneNumber')->getData();
+            $resume = $applicationForm->get('resume')->getData();
+            $coverLetter = $applicationForm->get('coverLetter')->getData();
+
+            $application->setApplicantName($name);
+            $application->setApplicantEmail($email);
+            $application->setApplicantPhoneNumber($phoneNumber);
+            $application->setResume($resume);
+            $application->setCoverLetter($coverLetter);
+            $application->setSubmittdAt(new \DateTimeImmutable());
+            $application->setCandidateId($candidate);
+            $application->setStatus('onWait');
+            $application->setJobListingId($job);
+
+            $entityManager->persist($application);
+            $entityManager->flush();
+
+            if (!$applicationForm->isSubmitted()) {
+                $this->addFlash('warning', 'Application failed to submit');
+            }
+
+            if ($applicationForm->isSubmitted()) {
+                $this->addFlash('success', 'Application successfully submitted');
+            }
+
+            return $this->redirectToRoute('app_homepage');
+
+        }
+
+        return $this->render(
+            'views/candidate-apply.html.twig',
+            [
+                'jobsId' => $jobsId,
+                'applicationForm' => $applicationForm->createView(),
             ]
         );
     }

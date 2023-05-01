@@ -32,7 +32,7 @@ class Application
     #[ORM\Column]
     private ?\DateTimeImmutable $submittdAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, options: ['default' => 'onWait'])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]

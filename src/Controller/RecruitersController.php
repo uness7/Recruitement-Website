@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Application;
 use App\Entity\Candidate;
 use App\Entity\JobListing;
 use App\Entity\Recruiter;
@@ -10,11 +11,16 @@ use App\Form\JobListingFormType;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use FontLib\Table\Type\loca;
+use FontLib\Table\Type\name;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RecruitersController extends AbstractController
@@ -273,17 +279,23 @@ class RecruitersController extends AbstractController
         EntityManagerInterface $entityManager,
     ) : Response
     {
-        $OurJobListing = $entityManager
+        $ourJobListing = $entityManager
             ->getRepository(JobListing::class)
-            ->findOneBy(['id' => $jobListingId]);
+            ->findOneBy(['id' => $jobListingId])
+        ;
 
-        $applications = $OurJobListing->getApplications();
+        if (!$ourJobListing) {
+            throw new NotFoundHttpException('The requested job listing was not found.');
+        }
+
+        $applications = $ourJobListing->getApplications();
+        $apps = $applications->getValues();
 
         return $this->render(
             'views/applications.html.twig',
             [
                 'jobListingId' => $jobListingId,
-                'applications' => $applications,
+                'applications' => $apps,
             ]
         );
     }
@@ -341,5 +353,54 @@ class RecruitersController extends AbstractController
                 'jobListingForm' => $jobListingForm
             ]
         );
+    }
+
+
+    #[Route('/recruiter/displayApplications/{jobListingId}/view-resume/{applicationId}',
+        name: 'app_recruiters_display_resume',
+        methods: ['GET'])]
+    public function displayPDF($jobListingId, $applicationId, EntityManagerInterface $entityManager): StreamedResponse
+    {
+        $app = $entityManager
+            ->getRepository(Application::class)
+            ->findOneBy(
+                [
+                    'id' => $applicationId
+                ]
+            );
+
+        $response = new StreamedResponse();
+        $response->setCallback(function () use ($app) {
+            fpassthru($app->getResume());
+        });
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename= resume.pdf');
+
+        return $response;
+    }
+
+    #[Route('/recruiter/displayApplications/{jobListingId}/viewCoverLetter/{applicationId}',
+        name: 'app_recruiters_display_coverLetter',
+        methods: ['GET'])]
+    public function displayCoverLetter($jobListingId, EntityManagerInterface $entityManager, $applicationId)
+    {
+        $app = $entityManager
+            ->getRepository(Application::class)
+            ->findOneBy(
+                [
+                    'id' => $applicationId
+                ]
+            );
+
+        $response = new StreamedResponse();
+        $response->setCallback(function () use ($app) {
+            fpassthru($app->getCoverLetter());
+        });
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename= coveletter.pdf');
+
+        return $response;
     }
 }

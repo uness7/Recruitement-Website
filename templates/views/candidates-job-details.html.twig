@@ -1,2 +1,73 @@
-job listing details
-<p>{{ jobsId }}</p>
+{% extends '/base.html.twig' %}
+
+{% block body %}
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-3 mx-3">Quiller.ma</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ path('app_homepage') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ path('app_candidate') }}"
+                        >My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_candidates_cv_builder') }}">CV Builder</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            <i class="bi bi-box-arrow-right fs-5"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <section class="my-5 py-4" >
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <h1 class="mb-4"> {{ job.title }} </h1>
+                            <p> <strong>Description: </strong>  {{ job.description }} </p>
+                            <p> <strong>Qualifications: </strong>  {{ job.qualifications }} </p>
+                            <p> <strong>Salary: </strong> {{ job.salary }}</p>
+                            <p><strong>Type: </strong>  {{ job.employmentType }} </p>
+                            <p><strong>Location: </strong>  {{ job.location }} </p>
+                            <p>Available From {{ job.expiresAt | date('Y/m/d') }} To  {{ job.createdAt | date('Y/m/d') }} </p>
+                        </div>
+                        <a href="{{ path('app_apply', { 'jobsId':job.id } ) }}" class="btn btn-dark mt-5">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="bg-light py-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p>&copy; Quiller.ma for recruitment 2023</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="{{ path('app_homepage') }}">Home</a>
+                            </li>
+                            <li class="list-inline-item"><a href="#">About Us</a></li>
+                            <li class="list-inline-item"><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+{% endblock %}
+
+
+

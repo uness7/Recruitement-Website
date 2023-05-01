@@ -44,7 +44,15 @@
                     {% else %}
                         {% for app in applications %}
                             <div>
-                                <p>{ app.applicantName }</p>
+                                <h2>{{ app.applicantName }}</h2>
+                                <p><strong>Email: </strong>{{ app.applicantEmail }}</p>
+                                <p><strong>Phone Number: </strong>{{ app.applicantPhoneNumber }}</p>
+                                <p><strong>Resume: </strong>
+                                    <a href="{{ path('app_recruiters_display_resume', { 'jobListingId' : app.jobListingId.id, 'applicationId': app.id } ) }}" class="link-dark">View</a>
+                                </p>
+                                <p><strong>Cover Letter: </strong>
+                                    <a href="{{ path('app_recruiters_display_coverLetter', { 'jobListingId': app.jobListingId.id, 'applicationId': app.id }) }}" class="link-dark disabled">View</a></p>
+                                <p><strong>Submitted At: </strong>{{ app.submittdAt | date('Y-m-d') }}</p>
                             </div>
                         {% endfor %}
                     {% endif %}

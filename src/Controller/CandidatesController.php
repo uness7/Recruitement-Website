@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Application;
 use App\Entity\Candidate;
+use App\Entity\JobListing;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,14 +16,39 @@ use Symfony\Component\Routing\Annotation\Route;
 class CandidatesController extends AbstractController
 {
     #[Route('/candidate', name: 'app_candidate', methods: ['GET'])]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('views/candidates.html.twig');
+        $candidateEmail = $this->getUser()->getUserIdentifier();
+        $candidate = $entityManager
+            ->getRepository(Candidate::class)
+            ->findOneBy(
+                [
+                    'email' => $candidateEmail
+                ]
+            );
+        $applications = $entityManager
+            ->getRepository(Application::class)
+            ->findBy(
+                [
+                    'candidateId' => $candidate
+                ]
+            );
+
+
+
+        return $this->render('views/candidates.html.twig',
+            [
+                'candidate' => $candidate,
+                'applications' => $applications
+            ]
+        );
     }
 
 
     #[Route('/candidate/updateProfile', name: 'app_candidates_updateinfo', methods: ['GET', 'POST'])]
-    public function updateInfo(EntityManagerInterface $entityManager, SessionInterface $session): Response
+    public function updateInfo(
+        EntityManagerInterface $entityManager,
+        SessionInterface $session): Response
     {
         $candidateEmail = $this->getUser()->getUserIdentifier();
         $user = $entityManager
@@ -75,4 +103,25 @@ class CandidatesController extends AbstractController
             ]
         );
     }
+
+
+    #[Route('/candidate/{jobsId}/cancel', name: 'app_candidates_cancel_application', methods: ['POST', 'GET'])]
+    public function cancelApplication($jobsId, EntityManagerInterface $entityManager) : RedirectResponse
+    {
+        $application = $entityManager
+            ->getRepository(Application::class)
+            ->findOneBy(
+                [
+                    'jobListingId' => $jobsId
+                ]
+            );
+
+        $entityManager->remove($application);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Application deleted successfully.');
+
+        return $this->redirectToRoute('app_candidate');
+    }
+
 }

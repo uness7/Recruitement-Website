@@ -21,7 +21,9 @@
                         <a class="nav-link active" aria-current="page" href="{{ path('app_homepage') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_candidate') }}">Youness Zioual</a>
+                        <a class="nav-link"
+                           href="{{ path('app_candidate') }}"
+                        >My Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_candidates_cv_builder') }}">CV Builder</a>
@@ -43,14 +45,16 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-5 d-flex justify-content-center align-items-center">
-                            <img class="w-50" src="{{ asset('Images/userAccount-svg.svg') }}">
+                            <img class="w-50"
+                                 src="{{ asset('Images/userAccount-svg.svg') }}"
+                            >
                         </div>
                         <div class="col-4 offset-1 p-3 px-5 border-start border-dark">
                             <div>
-                                <h2>Youness Zioual</h2>
-                                <p>Occupation: Student</p>
-                                <p>Age: 23</p>
-                                <p>Applications Count: 12</p>
+                                <h2>{{ candidate.firstName}} {{ candidate.lastName }}</h2>
+                                <p> <strong>Email:</strong> {{ candidate.email }} </p>
+                                <p> <strong>Phone Number:</strong>  {{ candidate.phoneNumber }} </p>
+                                <p> <strong>Applications count:</strong> 12</p>
                                 <a href="{{ path('app_candidates_updateinfo') }}" class="btn btn-primary">Update Profile</a>
                             </div>
                         </div>
@@ -64,43 +68,27 @@
     <section class="mb-5">
         <div class="container">
             <div class="card p-2">
+                {% for message in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
                 <a>
                     <h1><i class="bi bi-arrow-right"> </i> Jobs' Applications</h1>
-                    <div class="card-body">
-
-                    </div>
                 </a>
                 <div class="bard-body p-5 ">
+                    {% for app in applications %}
                     <div class="border-bottom border-dark mb-4 pb-4">
-                        <h3>Title : Technicien</h3>
-                        <p>Description: we need technician for our three departments that need help with informatics and stuff. </p>
-                        <p>Salary: 3999.00 dh</p>
-                        <p>Location: Casablanca</p>
-                        <p>Qualifications: Bac+3</p>
-                        <a class="btn btn-danger">Status</a>
-                        <a class="btn btn-secondary">Pull out</a>
-                        <a class="btn btn-secondary">Send A Message</a>
+                        <h3>{{ app.jobListingId.title  }}</h3>
+                        <p>Description:   {{ app.jobListingId.description  }} </p>
+                        <p>Salary:  {{ app.jobListingId.salary }}</p>
+                        <p>Location:  {{ app.jobListingId.location }}</p>
+                        <p>Qualifications:  {{ app.jobListingId.qualifications}}</p>
+{#                            <a class="btn btn-danger">Stat</a>#}
+                        <a href="{{ path('app_candidates_cancel_application',
+                            { 'jobsId': app.jobListingId.id }
+                        ) }}" class="btn btn-secondary">Cancel</a>
+                        <a class="btn btn-secondary">Send Email</a>
                     </div>
-                    <div class="border-bottom border-dark mb-4 pb-4">
-                        <h3>Title : Technicien</h3>
-                        <p>Description: we need technician for our three departments that need help with informatics and stuff. </p>
-                        <p>Salary: 3999.00 dh</p>
-                        <p>Location: Casablanca</p>
-                        <p>Qualifications: Bac+3</p>
-                        <a class="btn btn-danger">Status</a>
-                        <a class="btn btn-secondary">Pull out</a>
-                        <a class="btn btn-secondary">Send A Message</a>
-                    </div>
-                    <div class="border-bottom border-dark mb-4 pb-4">
-                        <h3>Title : Technicien</h3>
-                        <p>Description: we need technician for our three departments that need help with informatics and stuff. </p>
-                        <p>Salary: 3999.00 dh</p>
-                        <p>Location: Casablanca</p>
-                        <p>Qualifications: Bac+3</p>
-                        <a class="btn btn-danger">Status</a>
-                        <a class="btn btn-secondary">Pull out</a>
-                        <a class="btn btn-secondary">Send A Message</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
