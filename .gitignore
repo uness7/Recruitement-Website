@@ -10,4 +10,8 @@
 ###< symfony/framework-bundle ###
 
 
-node_modules
+node_modules/
+
+# IDE-specific files
+.idea/
+.vscode/
