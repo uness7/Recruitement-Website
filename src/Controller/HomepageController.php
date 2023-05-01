@@ -131,13 +131,31 @@ class HomepageController extends AbstractController
             $application->setApplicantName($name);
             $application->setApplicantEmail($email);
             $application->setApplicantPhoneNumber($phoneNumber);
-            $application->setResume($resume);
-            $application->setCoverLetter($coverLetter);
             $application->setSubmittdAt(new \DateTimeImmutable());
             $application->setCandidateId($candidate);
             $application->setStatus('onWait');
             $application->setJobListingId($job);
 
+            // save the dir where we want to upload our file
+            $uploadDirectory = 'C:\xampp\htdocs\uploads';
+
+            // generate a unique name
+            $newFilenameResume = uniqid().'.pdf';
+            $newFilenameCoverLetter = uniqid().'.pdf';
+
+            // move the file (s) to the desired directory
+            $resume->move($uploadDirectory, $newFilenameResume);
+            $coverLetter->move($uploadDirectory, $newFilenameCoverLetter);
+
+            // get the content out of the file
+            $fileContentsResume = file_get_contents($uploadDirectory.'/'.$newFilenameResume);
+            $fileContentsCoverLetter = file_get_contents($uploadDirectory.'/'.$newFilenameCoverLetter);
+
+            // save the content to the database as blob
+            $application->setResume($fileContentsResume);
+            $application->setCoverLetter($fileContentsCoverLetter);
+
+            // persist and flush data
             $entityManager->persist($application);
             $entityManager->flush();
 

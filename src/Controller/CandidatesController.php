@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Application;
 use App\Entity\Candidate;
-use App\Entity\JobListing;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,7 +57,7 @@ class CandidatesController extends AbstractController
             ->findOneBy(['email' => $candidateEmail]);
 
 
-        // let's get the data from the request
+
         if( $_SERVER['REQUEST_METHOD'] == 'POST') {
             $firstName = $_POST['first-name'];
             $lastName = $_POST['last-name'];
@@ -66,7 +65,6 @@ class CandidatesController extends AbstractController
             $resume = $_POST['resume'];
             $phoneNumber = $_POST['phone'];
             if (!$email || !$phoneNumber || !$resume || !$lastName || !$firstName ) {
-                // One or more required fields are missing
                 $session->getFlashBag()->add('failure', 'Sorry, but all fields are required.');
                 return $this->redirectToRoute('app_candidates_updateinfo');
             }
@@ -81,12 +79,10 @@ class CandidatesController extends AbstractController
             $user->setLastName($lastName);
             $user->setEmail($email);
 
-            // persist data and flush
             $entityManager->persist($candidate);
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // display a lil message to the end user
             $session->getFlashBag()->add('success', 'Your profile\'s info has been updated.');
         }
         return $this->render('views/candidates-update-profile.html.twig');
@@ -96,12 +92,7 @@ class CandidatesController extends AbstractController
     #[Route('/candidate/cv-builder', name: 'app_candidates_cv_builder', methods: ['GET'])]
     public function CVBuilder() : Response
     {
-        return $this->render(
-            'views/candidates_cv_builder.html.twig',
-            [
-
-            ]
-        );
+        return $this->render('views/candidates_cv_builder.html.twig');
     }
 
 

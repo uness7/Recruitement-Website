@@ -10,11 +10,7 @@ use App\Entity\User;
 use App\Form\JobListingFormType;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use FontLib\Table\Type\loca;
-use FontLib\Table\Type\name;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -54,117 +50,6 @@ class RecruitersController extends AbstractController
             'jobListings' => $recruiterJobListings,
         ]);
     }
-
-    // Display Every Candidate in the db
-    #[Route('/recruiter/{id}/getFreeCandidates', name: 'app_recruiter_getAllFreeCandidates', methods: ['GET'])]
-    public function getFreeCandidates(Recruiter $recruiter, EntityManagerInterface $entityManager): Response
-    {
-        $recruiterId = $recruiter->getId();
-        $freeCandidates = $entityManager
-            ->getRepository(Candidate::class)
-            ->findAll();
-        return $this->render('views/recruiterFeeCandidates.html.twig',
-            [
-                'freeCandidates' => $freeCandidates,
-                'recruiterId' => $recruiterId
-            ]);
-    }
-
-
-    // Get the candidates associated with the recruiter
-    #[Route('/recruiter/{id}/getMyCandidates/', name: 'app_recruiter_getAllCandidates', methods: ['GET'])]
-    public function getCandidates(Recruiter $recruiter, EntityManagerInterface $entityManager): Response
-    {
-        $recruiterId = $recruiter->getId();
-        $candidates = $entityManager
-            ->getRepository(Candidate::class)
-            ->findBy(
-                [
-                    'recruiter' => $recruiter
-                ]
-            );
-
-        return $this->render('views/recruiterMyCandidates.html.twig',
-            [
-                'candidates' => $candidates,
-                'recruiterId' => $recruiterId
-
-            ]);
-    }
-
-
-    #[Route('/recruiter/{id}/getFreeCandidates/addCandidate/{candidateId}', name: 'app_recruiters_addcandidate', methods: ['POST', 'GET'])]
-    public function addCandidateToRecruiter(
-        Recruiter              $recruiter,
-        EntityManagerInterface $entityManager,
-        int                    $candidateId
-    ): JsonResponse
-    {
-
-        $candidate = $entityManager
-            ->getRepository(Candidate::class)
-            ->findOneBy(['id' => $candidateId]);
-
-        $recruiter->addCandidate($candidate);
-        $entityManager->persist($recruiter);
-        $entityManager->flush();
-        return new JsonResponse(['message' => 'Candidate added successfully']);
-    }
-
-
-    #[Route('/recruiter/{id}/getFreeCandidates/removeCandidate/{candidateId}', name: 'app_recruiters_remove_candidate', methods: ['POST', 'GET'])]
-    public function removeCandidateFromRecruiter(
-        Recruiter              $recruiter,
-        EntityManagerInterface $entityManager,
-        int                    $candidateId
-    ): JsonResponse
-    {
-        $candidate = $entityManager
-            ->getRepository(Candidate::class)
-            ->findOneBy(['id' => $candidateId]);
-
-        $recruiter->removeCandidate($candidate);
-        $entityManager->persist($recruiter);
-        $entityManager->flush();
-        return new JsonResponse(['message' => 'Candidate removed successfully']);
-    }
-
-
-
-
-
-
-
-    #[Route('/recruiter/{id}/getMyCandidates/{candidateId}/resume', name: 'app_recruiters_displayresume')]
-    public function displayResume(
-        Recruiter              $recruiter,
-        int                    $candidateId,
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-
-        $candidate = $entityManager
-            ->getRepository(Candidate::class)
-            ->findOneBy(['id' => $candidateId]);
-        $content = stream_get_contents($candidate->getResume());
-
-        if ($content == null) {
-            return new Response('Sorry, but this candidate haven\'t uploaded their cv' );
-        }
-
-        return new Response($content, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $candidate->getFirstName() . '_resume.pdf"',
-        ]);
-
-
-
-    }
-
-
-
-
-
 
 
 
@@ -359,47 +244,40 @@ class RecruitersController extends AbstractController
     #[Route('/recruiter/displayApplications/{jobListingId}/view-resume/{applicationId}',
         name: 'app_recruiters_display_resume',
         methods: ['GET'])]
-    public function displayPDF($jobListingId, $applicationId, EntityManagerInterface $entityManager): StreamedResponse
+    public function displayPDF($jobListingId, $applicationId, EntityManagerInterface $entityManager) : StreamedResponse
     {
         $app = $entityManager
             ->getRepository(Application::class)
-            ->findOneBy(
-                [
-                    'id' => $applicationId
-                ]
-            );
+            ->findOneBy(['id' => $applicationId]);
 
+        $pdfData = $app->getResume();
         $response = new StreamedResponse();
-        $response->setCallback(function () use ($app) {
-            fpassthru($app->getResume());
-        });
-        $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'inline; filename= resume.pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename="resume.pdf"');
+        $response->setCallback(function() use ($pdfData) {
+            fpassthru($pdfData);
+        });
 
         return $response;
     }
 
+
     #[Route('/recruiter/displayApplications/{jobListingId}/viewCoverLetter/{applicationId}',
         name: 'app_recruiters_display_coverLetter',
         methods: ['GET'])]
-    public function displayCoverLetter($jobListingId, EntityManagerInterface $entityManager, $applicationId)
+    public function displayCoverLetter($jobListingId, EntityManagerInterface $entityManager, $applicationId): StreamedResponse
     {
         $app = $entityManager
             ->getRepository(Application::class)
-            ->findOneBy(
-                [
-                    'id' => $applicationId
-                ]
-            );
+            ->findOneBy(['id' => $applicationId])
+        ;
 
         $response = new StreamedResponse();
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename=cover_letter.pdf');
         $response->setCallback(function () use ($app) {
             fpassthru($app->getCoverLetter());
         });
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'inline; filename= coveletter.pdf');
 
         return $response;
     }
