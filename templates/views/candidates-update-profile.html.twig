@@ -49,42 +49,14 @@
                         <h4>Candidate Edit</h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST">
-                            <input type="hidden" name="candidate_id">
-
-                            <div class="mb-3">
-                                <label>Photo:</label>
-                                <input type="file" name="photo"  class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Candidate First Name</label>
-                                <input type="text" name="first-name"  class="form-control">
-                            </div>
-
-                            <div class="mb-3">
-                                <label>Candidate First Name</label>
-                                <input type="text" name="last-name"  class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Candidate Email</label>
-                                <input type="email" name="email"  class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Candidate Phone</label>
-                                <input type="text" name="phone"  class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Candidate Resume</label>
-                                <input type="file" name="resume" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <a href="{{ path('app_candidates_updateinfo') }}">
-                                    <button type="submit" class="btn btn-primary">
-                                        Update Candidate
-                                    </button>
-                                </a>
-                            </div>
-                        </form>
+                        {{ form_start(updateInfoForm) }}
+                            {{ form_row(updateInfoForm.photo, { 'attr': {'class': 'form-control'} } ) }}
+                            {{ form_row(updateInfoForm.firstName, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(updateInfoForm.lastName, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(updateInfoForm.email, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_row(updateInfoForm.phoneNumber, { 'attr': {'class': 'form-control'} }) }}
+                            <button type="submit" class="btn btn-dark text-light mt-5">Save</button>
+                        {{ form_end(updateInfoForm) }}
                     </div>
                 </div>
             </div>

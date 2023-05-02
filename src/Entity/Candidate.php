@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CandidateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CandidateRepository::class)]
@@ -56,6 +57,9 @@ class Candidate
 
     #[ORM\OneToMany(mappedBy: 'candidateId', targetEntity: Application::class, orphanRemoval: true)]
     private Collection $applications;
+
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $photo = null;
 
     public function __construct()
     {
@@ -165,6 +169,18 @@ class Candidate
                 $application->setCandidateId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }
