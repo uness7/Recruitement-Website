@@ -30,25 +30,13 @@ class RecruitersController extends AbstractController
             ->findOneBy([
                 'email' => $recruiterEmail
             ]);
-
-        $recruiterId = $recruiter->getId();
-        $recruiterCompany = $recruiter->getCompanyName();
-        $recruiterName = $recruiter->getName();
-        $recruiterLastName = $recruiter->getLastName();
         $recruiterJobListings = $recruiter->getJobListings();
-
-
-
-
         return $this->render('views/recruiters.html.twig',
-        [
-            'recruiterName' => $recruiterName,
-            'recruiterLastName' => $recruiterLastName,
-            'recruiterId' => $recruiterId,
-            'company' => $recruiterCompany,
-            'email'=> $recruiterEmail,
-            'jobListings' => $recruiterJobListings,
-        ]);
+            [
+                'recruiter' => $recruiter,
+                'jobListings' => $recruiterJobListings,
+            ]
+        );
     }
 
 
@@ -56,7 +44,6 @@ class RecruitersController extends AbstractController
     #[Route('/recruiter/update-profile', name: 'app_recruiters_update_profile', methods: ['GET', 'POST'])]
     public function updateProfile(EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-        // recruiter id
         $recruiterEmail = $this->getUser()->getUserIdentifier();
         $recruiter = $entityManager
             ->getRepository(Recruiter::class)
@@ -65,7 +52,6 @@ class RecruitersController extends AbstractController
             ->getRepository(User::class)
             ->findOneBy(['email' => $recruiterEmail]);
 
-        // get data
         if( $_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = $_POST['email'];
             $phoneNumber = $_POST['phone'];
@@ -83,14 +69,16 @@ class RecruitersController extends AbstractController
 
             $user->setEmail($email);
 
-            // persist data and flush
             $entityManager->persist($recruiter);
             $entityManager->persist($user);
             $entityManager->flush();
-            // display a lil message to the end user
+
             $session->getFlashBag()->add('success', 'Your profile\'s info has been updated.');
         }
-        return $this->render('views/recruiter-update-profile.html.twig');
+        return $this->render('views/recruiter-update-profile.html.twig',
+        [
+            'recruiter' => $recruiter
+        ]);
     }
 
 

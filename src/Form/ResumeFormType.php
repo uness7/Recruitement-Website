@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,74 +20,69 @@ class ResumeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstname', TextType::class, [
-                'label' => 'Prénom',
+            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class)
+            ->add('birthdate', DateType::class, [
+                'label' => 'Birthdate',
+                'required' => true,
+                'widget' => 'single_text',
+            ])
+            ->add('gender', ChoiceType::class, [
+                'label' => 'Gender',
+                'required' => true,
+                'choices' => [
+                    'Man' => 'male',
+                    'Woman' => 'female',
+                ],
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'City',
                 'required' => true,
             ])
-            ->add('lastname', TextType::class, [
-                'label' => 'Nom',
+            ->add('address', TextType::class, [
+                'label' => 'Address',
                 'required' => true,
             ])
-//            ->add('birthdate', DateType::class, [
-//                'label' => 'Date de naissance',
-//                'required' => true,
-//                'widget' => 'single_text',
-//            ])
-//            ->add('gender', ChoiceType::class, [
-//                'label' => 'Genre',
-//                'required' => true,
-//                'choices' => [
-//                    'Homme' => 'male',
-//                    'Femme' => 'female',
-//                ],
-//            ])
-//            ->add('city', TextType::class, [
-//                'label' => 'Ville de résidence',
-//                'required' => true,
-//            ])
-//            ->add('address', TextType::class, [
-//                'label' => 'Adresse',
-//                'required' => true,
-//            ])
             ->add('email', EmailType::class, [
-                'label' => 'Adresse e-mail',
+                'label' => 'Email',
                 'required' => true,
             ])
             ->add('phoneNumber', IntegerType::class, [
-                'label' => 'Téléphone',
+                'label' => 'Phone Number',
                 'required' => true,
             ])
-//            ->add('social_media', TextType::class, [
-//                'label' => 'Adresse de réseaux sociaux',
+            ->add('social_media', TextType::class, [
+                'label' => 'Social Media',
+            ])
+            ->add('language', ChoiceType::class, [
+                'label' => 'Language',
 //                'required' => true,
-//            ])
-//            ->add('language', ChoiceType::class, [
-//                'label' => 'Langue',
+                'choices' => [
+                    'French' => 'fr',
+                    'English' => 'en',
+                    'Arabic' => 'ar',
+                ],
+            ])
+            ->add('language_level', ChoiceType::class, [
+                'label' => 'language level',
 //                'required' => true,
-//                'choices' => [
-//                    'Français' => 'fr',
-//                    'Anglais' => 'en',
-//                    'Espagnol' => 'es',
-//                    'Italien' => 'it',
-//                    'Allemand' => 'de',
-//                    'Arabe' => 'ar',
-//                ],
-//            ])
-//            ->add('language_level', ChoiceType::class, [
-//                'label' => 'Niveau de langue',
-//                'required' => true,
-//                'choices' => [
-//                    'Débutant (A1)' => 'A1-beginner',
-//                    'Débutant (A2)' => 'A2-beginner',
-//                    'Notions' => 'basic',
-//                    'Intermédiaire (B1)' => 'B1-intermediate',
-//                    'Intermédiaire avancé (B2)' => 'B2-upper-intermediate',
-//                    'Opérationnel (C1)' => 'C1-advanced',
-//                    'Avancé (C2)' => 'C2-proficient',
-//                    'Bilingue' => 'bilingual',
-//                    'Langue maternelle' => 'native',
-//                ],
+                'choices' => [
+                    'Beginner' => 'beginner',
+                    'Intermediate' => 'intermediate',
+                    'Advanced' => 'advanced'
+                ]]
+            )
         ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+        $resolver->setDefaults(
+            [
+                'data_class' => null
+            ]
+        );
     }
 }
 

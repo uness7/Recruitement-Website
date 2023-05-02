@@ -71,6 +71,9 @@
                     $user->setRecruiter($recruiter);
 
                    $recruiter->setEmail($email);
+                   $recruiter->setFirstName($firstName);
+                   $recruiter->setLastName($lastName);
+
                    if(!empty($companyName)) {
                        $recruiter->setCompanyName($companyName);
                    }
@@ -79,12 +82,6 @@
                 }
                 $entityManager->persist($user);
                 $entityManager->flush();
-//                try {
-//
-//                } catch (\Throwable $e) {
-//                    // Handle errors that may occur during the persistence of the user entity
-//                    throw new \RuntimeException('Unable to register user', 0, $e);
-//                }
 
                 return $this->redirectToRoute('app_login');
             }

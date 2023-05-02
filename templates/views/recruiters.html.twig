@@ -22,7 +22,10 @@
                 <div class="collapse navbar-collapse" id="navmenu">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item text-center">
-                            <span class="text-light btn btn-hover">Youness Zioual</span>
+                            <a href="{{ path('app_homepage') }}"><span class="text-light btn btn-hover">Home</span></a>
+                        </li>
+                        <li class="nav-item text-center">
+                            <a href="{{ path('app_recruiter') }}"><span class="text-light btn btn-hover">My account</span></a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ path('app_logout') }}" class="text-light btn btn-hover">
@@ -45,10 +48,10 @@
                             <h1 class=" text-right text-light mb-4">
                                 <i class="bi bi-info-circle"></i>
                                 Profile Information</h1>
-                            <p>First Name: {{ recruiterName }}</p>
-                            <p>Last Name: {{ recruiterLastName }}</p>
-                            <p>Email: younes@gmail.com</p>
-                            <p>Company: Waizi's</p>
+                            <p>First Name: {{ recruiter.firstName }}</p>
+                            <p>Last Name: {{ recruiter.lastName }}</p>
+                            <p>Email: {{  recruiter.email  }}</p>
+                            <p>Company: {{ recruiter.companyName }}</p>
                             <a href="{{ path('app_recruiters_update_profile') }}" class="btn btn-light mt-5">Update Profile</a>
                             <a href="{{ path('app_recruiters_create_job_listing') }}" class="btn btn-light mt-5">Create A Job</a>
                         </div>  
@@ -65,8 +68,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card p-3">
-                        <div class="card-title text-center text-uppercase text-black">
-                            <h4>See posts you created & modify them as you wish!</h4>
+                        <div class="card-title my-5 text-center text-uppercase text-black">
+                            <h2><strong>Posts You Created Show Up Here</strong></h2>
                         </div>
                         <div class="card-body">
                             {% for jobListing in jobListings %}

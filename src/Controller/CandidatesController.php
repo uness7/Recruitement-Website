@@ -6,7 +6,9 @@ use App\Entity\Application;
 use App\Entity\Candidate;
 use App\Entity\User;
 use App\Form\CandidateUpdateFormType;
+use App\Form\ResumeFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,10 +106,46 @@ class CandidatesController extends AbstractController
     }
 
 
-    #[Route('/candidate/cv-builder', name: 'app_candidates_cv_builder', methods: ['GET'])]
-    public function CVBuilder() : Response
+    #[Route('/candidate/cv-builder', name: 'app_candidates_cv_builder', methods: ['GET', 'POST'])]
+    public function CVBuilder(Request $request) : Response
     {
-        return $this->render('views/candidates_cv_builder.html.twig');
+        $dompdf = new Dompdf();
+
+        $form = $this->createForm(ResumeFormType::class);
+        $form->handleRequest($request);
+
+        $firstName = $form->get('firstName')->getData();
+        $lastName = $form->get('lastName')->getData();
+        $email = $form->get('email')->getData();
+        $phoneNumber = $form->get('phoneNumber')->getData();
+        $birthdate = $form->get('birthdate')->getData();
+        $address = $form->get('address')->getData();
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $html = $this->renderView('pdf_template.html.twig', [
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'email' => $email,
+                'phoneNumber' => $phoneNumber,
+                'birthdate' => $birthdate,
+                'address' => $address,
+            ]);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            return new Response($dompdf->output(), 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="your_pdf_name.pdf"',
+            ]);
+
+
+        }
+
+        return $this->render('views/candidates_cv_builder.html.twig',
+            [
+                'resumeForm' => $form->createView(),
+            ]
+        );
     }
 
 
