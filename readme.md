@@ -1,19 +1,21 @@
 # Recruitment Project
-This project is a recruitment platform that allows recruiters to manage candidates for different job positions.
-
-# Features
-
-Recruiters can create new job positions and specify the required skills and qualifications for each position.
-Recruiters can search and view a list of candidates who match the required skills and qualifications for each job position.
-Recruiters can add or remove candidates from a job position and keep track of their progress in the recruitment process.
-Candidates can create a profile, upload their resumes and apply for job positions that match their skills and qualifications.
-
-
+This project is a basic recruitment platform that allows recruiters to manage candidates for different job positions. Candidates or employees can post for job position that are available in the home page after logging in. Recruiters can view candidates of their different job listings, and then they contact the candidates for further discussions about the job.
 
 # Technologies Used
-HTML
-CSS
-JavaScript
-PHP 
-Symfony 6.2
-Mysql
+HTML & CSS & Bootstrap 5 
+PHP, Symfony 6.2 & Mysql
+
+# Features of this web app
+
+The web app is a job application platform that allows candidates to submit their job applications to employers. It has the following features:
+
+1. Candidate registration and login: Candidates can register for an account on the platform and log in to access their dashboard.
+2. Job listings: Employers can post job listings on the platform that candidates can browse and apply to.
+3. Application submission: Candidates can submit their job applications by filling out a form that includes their personal information, resume, and other relevant details.
+4. Application tracking: Candidates can view the status of their job applications and receive updates from employers regarding their applications.
+5. Resume builder: The platform includes a resume builder tool that candidates can use to create a professional-looking resume to attach to their job applications.
+6. PDF generation: The platform can generate a PDF document that includes a summary of the candidate's personal information and resume.
+7. Image upload: Candidates can upload their profile picture to their profile.
+8. Email integration: The platform can integrate with email to send notification emails to candidates and employers regarding the status of their job applications.
+
+
