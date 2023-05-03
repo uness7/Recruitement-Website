@@ -87,7 +87,9 @@
                         <a href="{{ path('app_candidates_cancel_application',
                             { 'jobsId': app.jobListingId.id }
                         ) }}" class="btn btn-secondary">Cancel</a>
-                        <a class="btn btn-secondary">Send Email</a>
+                        <a href="mailto:recipient@gmail.com" class="btn btn-secondary">
+                            Send mail
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
@@ -110,48 +112,48 @@
 {#    </section>#}
 
     {# Saved Jobs: #}
-    <section class="mb-5">
-        <div class="container">
-            <div class="card p-2">
-                <a>
-                    <h1><i class="bi bi-save-fill">   </i>Saved Jobs</h1>
-                    <div class="card-body">
-                        <div class="card-body border rounded border-dark mb-3">
-                            <div class="d-flex justify-content-between">
-                                <h3>Job's title</h3>
-                                <p>location: Casablanca</p>
-                                <div>
-                                    <a class="btn btn-dark text-light">
-                                        unsave
-                                    </a>
-                                    <a class="btn btn-dark text-light">
-                                        view
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body border rounded border-dark mb-3">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h3>Job's title</h3>
-                                    <p>location: Casablanca</p>
-                                </div>
-                                <div>
-                                    <a class="btn btn-dark text-light">
-                                        unsave
-                                    </a>
-                                    <a class="btn btn-dark text-light">
-                                        view
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{#    <section class="mb-5">#}
+{#        <div class="container">#}
+{#            <div class="card p-2">#}
+{#                <a>#}
+{#                    <h1><i class="bi bi-save-fill">   </i>Saved Jobs</h1>#}
+{#                    <div class="card-body">#}
+{#                        <div class="card-body border rounded border-dark mb-3">#}
+{#                            <div class="d-flex justify-content-between">#}
+{#                                <h3>Job's title</h3>#}
+{#                                <p>location: Casablanca</p>#}
+{#                                <div>#}
+{#                                    <a class="btn btn-dark text-light">#}
+{#                                        unsave#}
+{#                                    </a>#}
+{#                                    <a class="btn btn-dark text-light">#}
+{#                                        view#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-body border rounded border-dark mb-3">#}
+{#                            <div class="d-flex justify-content-between">#}
+{#                                <div>#}
+{#                                    <h3>Job's title</h3>#}
+{#                                    <p>location: Casablanca</p>#}
+{#                                </div>#}
+{#                                <div>#}
+{#                                    <a class="btn btn-dark text-light">#}
+{#                                        unsave#}
+{#                                    </a>#}
+{#                                    <a class="btn btn-dark text-light">#}
+{#                                        view#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
 
-                </a>
-            </div>
-        </div>
-    </section>
+{#                </a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </section>#}
 
     {# Recommended Jobs #}
 {#    <section class="mb-5">#}
