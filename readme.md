@@ -1,7 +1,7 @@
 # Recruitment Project
 This project is a recruitment platform that allows recruiters to manage candidates for different job positions.
 
-# Summary 
+# Features of this web app
 
 The web app is a job application platform that allows candidates to submit their job applications to employers. It has the following features:
 
