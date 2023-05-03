@@ -1,5 +1,9 @@
 # Recruitment Project
-This project is a recruitment platform that allows recruiters to manage candidates for different job positions.
+This project is a basic recruitment platform that allows recruiters to manage candidates for different job positions. Candidates or employees can post for job position that are available in the home page after logging in. Recruiters can view candidates of their different job listings, and then they contact the candidates for further discussions about the job.
+
+# Technologies Used
+HTML & CSS & Bootstrap 5 
+PHP, Symfony 6.2 & Mysql
 
 # Features of this web app
 
@@ -15,7 +19,3 @@ The web app is a job application platform that allows candidates to submit their
 8. Email integration: The platform can integrate with email to send notification emails to candidates and employers regarding the status of their job applications.
 
 
-
-# Technologies Used
-HTML & CSS & Bootstrap 5 
-PHP, Symfony 6.2 & Mysql
