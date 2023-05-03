@@ -1,19 +1,21 @@
 # Recruitment Project
 This project is a recruitment platform that allows recruiters to manage candidates for different job positions.
 
-# Features
+# Summary 
 
-Recruiters can create new job positions and specify the required skills and qualifications for each position.
-Recruiters can search and view a list of candidates who match the required skills and qualifications for each job position.
-Recruiters can add or remove candidates from a job position and keep track of their progress in the recruitment process.
-Candidates can create a profile, upload their resumes and apply for job positions that match their skills and qualifications.
+The web app is a job application platform that allows candidates to submit their job applications to employers. It has the following features:
+
+Candidate registration and login: Candidates can register for an account on the platform and log in to access their dashboard.
+Job listings: Employers can post job listings on the platform that candidates can browse and apply to.
+Application submission: Candidates can submit their job applications by filling out a form that includes their personal information, resume, and other relevant details.
+Application tracking: Candidates can view the status of their job applications and receive updates from employers regarding their applications.
+Resume builder: The platform includes a resume builder tool that candidates can use to create a professional-looking resume to attach to their job applications.
+PDF generation: The platform can generate a PDF document that includes a summary of the candidate's personal information and resume.
+Image upload: Candidates can upload their profile picture to their profile.
+Email integration: The platform can integrate with email to send notification emails to candidates and employers regarding the status of their job applications.
 
 
 
 # Technologies Used
-HTML
-CSS
-JavaScript
-PHP 
-Symfony 6.2
-Mysql
+HTML & CSS & Bootstrap 5 
+PHP, Symfony 6.2 & Mysql
